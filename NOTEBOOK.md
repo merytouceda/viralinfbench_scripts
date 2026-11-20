@@ -74,3 +74,29 @@ Entry format:
   - Delete the old `*_parse.r` scripts and `merge_outputs.r`.
   - Remember that the scripts live in this repo and in `pipeline/bin/`: after
     editing one, copy it to the other.
+- Later the same day: decided viruses and plasmids get separate pipelines and
+  separate script repos. Plasmid parsing moved to `plasmidinfbench_scripts`
+  (see its notebook).
+- Changed the output format of `parse_viral_inference.r` to
+  `sampleid | tool | contig | score | call`, with call = 1 (viral) or 0
+  (scored but not called). V/P/O is gone because this parser only looks at
+  viruses. Removed the plasmid parts: geNomad `--plasmid` and the DMC2 `pls` → P
+  rule. Briefly had a `target` column (virus/plasmid) so both kinds of output
+  could be stacked; dropped it once the pipelines were split.
+- `merge_viral_inference.r` now writes 1/0 per tool. 0 means not called or
+  not reported; the long table tells the two apart.
+- Restructured the parser so each tool is one entry (file pattern + parse
+  function) in a `tools` list, because more tools will be added. The `--tool`
+  choices and help text come from the list. Wrote `scripts/README.md`,
+  explaining when adding a tool only needs a new entry and when it needs more
+  (results split over several files, or a FASTA of hits only). Tested the
+  README's example entry in a copy of the parser: it parses and shows in `--help`.
+- VirSorter2 `lt2gene` contigs (fewer than 2 genes but have hallmark genes)
+  have `nan` scores: 118 of 2013 calls. They are now read as NA and still
+  count as calls. Still to decide: leave them NA or set them to 1 for ROC/PR.
+- Re-ran on `data/`: same call counts as before (DMC2 7, DVF 1397, geNomad
+  17158, viraLM 33, VirRep 2313, VS2 2013).
+- Copied the new scripts into `bonphyre_pipelines`
+  (`dev/i_mg_viralinfbenchmark/pipeline/bin/`, branch
+  `viralinfbench-parse-outputs`) and updated the module comments. Still passes
+  the Nextflow `--help` check.
