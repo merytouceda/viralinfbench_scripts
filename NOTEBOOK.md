@@ -110,3 +110,17 @@ Entry format:
 - The shared `seeker` module only emits `bins_folder/Results/phage_genomes`,
   not the predictions table. It needs an extra output before the pipeline can
   parse Seeker.
+- Fixed the `seeker` module in the `dev/` library copy and added Seeker to the
+  workflow, following my Slurm test run (seqkit `-m 1000` first, then
+  `predict-metagenome`, which writes its predictions to stdout).
+  - The module now saves stdout to `seeker_predictions.tsv` and emits that
+    file. The old output, `bins_folder/Results/phage_genomes`, was wrong.
+  - Dropped `PYTHONNOUSERSITE=1` and `--cleanenv` from the Slurm run; not
+    needed in the pipeline.
+  - Seeker has no length option, so contigs go through a new
+    `filter_min_length` process in a dev copy of `seqkit.nf` first.
+  - New config settings: `seeker_minlength = 1000` and `container__seeker`
+    (`seeker-1.0.3.sif`; still need to check the image is on Hazel).
+  - `nextflow lint`: no errors.
+  - Seeker isn't in the shared `nextflow_process_library` at all. Both modules
+    need an upstream PR there, plus a rerun of `conf/make_containers.py`.
