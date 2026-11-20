@@ -100,3 +100,13 @@ Entry format:
   (`dev/i_mg_viralinfbenchmark/pipeline/bin/`, branch
   `viralinfbench-parse-outputs`) and updated the module comments. Still passes
   the Nextflow `--help` check.
+- Added Seeker to `parse_viral_inference.r` (one new `tools` entry). It reads
+  `seeker_predictions.tsv`: score = phage score, call = `prediction == "Phage"`.
+  Used Seeker's own label rather than a cutoff: Phage rows score ≥ 0.5 and
+  Bacteria rows ≤ 0.5, so the score and the label agree. Test file
+  (`data/seeker/`): 172757 contigs (no length cutoff), 42545 phage calls. Only
+  1953 contig IDs match the DVF test file, because the test data comes from
+  different projects.
+- The shared `seeker` module only emits `bins_folder/Results/phage_genomes`,
+  not the predictions table. It needs an extra output before the pipeline can
+  parse Seeker.
