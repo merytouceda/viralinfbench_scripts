@@ -43,6 +43,7 @@ VirSorter2 partials), the row with a call is kept, then the highest score.
 | `genomad` | `*_virus_summary.tsv` | `virus_score` | every row (file only lists viral calls) |
 | `viralm` | `result_*.csv` | `virus_score` | `prediction == "virus"` |
 | `virrep` | `*_score.tsv` | `score` | score ≥ `--virrep_score` (0.5) |
+| `seeker` | `seeker_predictions.tsv` | `score` (phage score) | `prediction == "Phage"` |
 | `virsorter2` | `final-viral-score.tsv` | `max_score` (`NA` for `lt2gene` contigs) | every row (file only lists viral calls) |
 
 ### Adding a tool
